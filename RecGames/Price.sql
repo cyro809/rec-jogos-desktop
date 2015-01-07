@@ -1,0 +1,4 @@
+﻿CREATE TABLE Price
+(
+	[Id] INT NOT NULL PRIMARY KEY
+)

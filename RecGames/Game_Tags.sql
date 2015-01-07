@@ -1,0 +1,4 @@
+﻿CREATE TABLE Game_Tags
+(
+	[Id] INT NOT NULL PRIMARY KEY
+)
