@@ -1,0 +1,4 @@
+C:\Users\Daniel\Coder\C#\rec-jogos-desktop\RecGames\obj\Debug\RecGames.LoginWindowsForm.resources
+C:\Users\Daniel\Coder\C#\rec-jogos-desktop\RecGames\obj\Debug\RecGames.MainWindowsForm.resources
+C:\Users\Daniel\Coder\C#\rec-jogos-desktop\RecGames\obj\Debug\RecGames.csproj.GenerateResource.Cache
+C:\Users\Daniel\Coder\C#\rec-jogos-desktop\RecGames\bin\Debug\RecGames.exe.config
