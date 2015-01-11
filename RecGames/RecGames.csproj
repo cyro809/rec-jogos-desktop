@@ -61,10 +61,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\DLL's\HtmlAgilityPack.dll</HintPath>
+      <HintPath>D:\UFRJ\RecInfo\Trabalho\HtmlAgilityPack.1.4.6\Net20\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\DLL's\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\UFRJ\RecInfo\Trabalho\Json60r2\Bin\Net20\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -35,7 +35,7 @@ namespace RecGames
 
             try
             {
-                playerInfo.getPlayerInfo(player);
+                playerInfo.GetPlayerInfo(player);
             }
             catch(LoginException e)
             {
@@ -50,12 +50,12 @@ namespace RecGames
             PlayerInfo playerInfo = new PlayerInfo(id);
             List<int> tags = new List<int>();
 
-            playerInfo.getPlayerInfo(player);
-            playerInfo.getPlayerOwnedGames(player);
-            playerInfo.getPlayerRecentlyPlayedGames(player);
+            playerInfo.GetPlayerInfo(player);
+            playerInfo.GetPlayerOwnedGames(player);
+            playerInfo.GetPlayerRecentlyPlayedGames(player);
 
-            tags = g.getTagsMostPlayedGames(player);
-            playerInfo.getPlayerDefiningTags(tags, player);
+            tags = g.GetTagsMostPlayedGames(player);
+            playerInfo.GetPlayerDefiningTags(tags, player);
         }
 
         public static void beginRecommendation(string id)
@@ -67,7 +67,7 @@ namespace RecGames
             List<int> topRecommendedGames = new List<int>();
 
             recommendedGames = g.getRecommendedGames(player);
-            topRecommendedGames = g.recommendationsScore(recommendedGames, tags, id);
+            topRecommendedGames = g.RecommendationsScore(recommendedGames, tags, id);
 
             List<Game> gamesToJustify = new List<Game>();
 
