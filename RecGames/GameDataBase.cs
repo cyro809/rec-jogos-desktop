@@ -131,30 +131,26 @@ namespace RecGames
                     while (reader.Read())
                     {
                         Game game = new Game();
-                        game.steam_appid = reader.GetInt32(0);
-                        if (!player.ownedGames.Keys.Contains(game.steam_appid))
+                        game.SteamAppId = reader.GetInt32(0);
+                        if (!player.ownedGames.Keys.Contains(game.SteamAppId))
                         {
-                            game.name = reader.GetString(1);
+                            game.Name = reader.GetString(1);
 
                             Platforms platforms = new Platforms();
-                            platforms.supported = reader.GetString(3);
-                            game.platforms = platforms;
+                            platforms.platformsSupported = reader.GetString(3);
+                            game.Platforms = platforms;
                             
                             List<string> developers = new List<string>();
                             developers.Add(reader.GetString(4));
-                            game.developers = developers;
+                            game.Developers = developers;
                             
                             List<string> publishers = new List<string>();
                             publishers.Add(reader.GetString(5));
-                            game.publishers = publishers;
+                            game.Publishers = publishers;
                             
-                            Recommendations recommendations = new Recommendations();
-                            recommendations.total = reader.GetInt32(6);
-                            game.recommendations = recommendations;
-                            
-                            Metacritic metacritic = new Metacritic();
-                            metacritic.score = reader.GetInt32(7);
-                            game.metacritic = metacritic;
+                            game.TotalRecommendations = reader.GetInt32(6); ;
+
+                            game.MetacriticScore = reader.GetInt32(7); ;
                             
                             DefineGameTags(game);
                             recommendedGames.Add(game);
@@ -170,11 +166,11 @@ namespace RecGames
 
         public void DefineGameTags(Game game)
         {
-            SqlConnection con2 = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=C:\Users\Cyro\Documents\Visual Studio 2013\Projects\recgames\RecGames\GamesInfo.mdf;Integrated Security=True");
+            SqlConnection con2 = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|GamesInfo.mdf;Integrated Security=True");
             string sql = "SELECT DISTINCT t.Tag FROM Game_Tags AS gt, Tags As t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
             SqlCommand cmd = new SqlCommand(sql, con2);
 
-            cmd.Parameters.Add("@gameId", SqlDbType.Int).Value = game.steam_appid;
+            cmd.Parameters.Add("@gameId", SqlDbType.Int).Value = game.SteamAppId;
 
             con2.Open();
 
@@ -202,12 +198,12 @@ namespace RecGames
 
             foreach(Game game in recommendedGames)
             {
-                gameTagsCount.Add(game.steam_appid);
+                gameTagsCount.Add(game.SteamAppId);
 
                 try
                 {
-                    game_metacritic.Add(game.steam_appid, game.metacritic.score);
-                    game_recommendations.Add(game.steam_appid, game.recommendations.total);
+                    game_metacritic.Add(game.SteamAppId, game.MetacriticScore);
+                    game_recommendations.Add(game.SteamAppId, game.TotalRecommendations);
                 }
                 catch(System.ArgumentException)
                 {
@@ -230,6 +226,7 @@ namespace RecGames
 
             List<int> topRecommendedGames = new List<int>();
 
+            //alterar o modo como o diretorio eh acessado
             using (StreamWriter arquivo = File.AppendText(@"recommendation\player "+id+".txt"))
             {
                 foreach(KeyValuePair<int,float> p in recommendedGameScore.OrderByDescending(key => key.Value))
@@ -248,12 +245,12 @@ namespace RecGames
             string sql = "INSERT INTO game (id, name, metacritic, recommendations, platforms, publishers, developers) VALUES (@id, @name,@metacritic, @recommendations, @platforms, @publishers, @developers)";
             SqlCommand cmd = new SqlCommand(sql, con);
 
-            cmd.Parameters.Add("@id", SqlDbType.Int).Value = game.steam_appid;
-            cmd.Parameters.Add("@name", SqlDbType.VarChar, 50).Value = game.name;
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = game.SteamAppId;
+            cmd.Parameters.Add("@name", SqlDbType.VarChar, 50).Value = game.Name;
 
             try
             {
-                cmd.Parameters.Add("@metacritic", SqlDbType.Int).Value = game.metacritic.score;
+                cmd.Parameters.Add("@metacritic", SqlDbType.Int).Value = game.MetacriticScore;
             }
             catch (System.NullReferenceException)
             {
@@ -263,7 +260,7 @@ namespace RecGames
 
             try
             {
-                cmd.Parameters.Add("@recommendations", SqlDbType.Int).Value = game.recommendations.total;
+                cmd.Parameters.Add("@recommendations", SqlDbType.Int).Value = game.TotalRecommendations;
             }
             catch (System.NullReferenceException)
             {
@@ -271,9 +268,9 @@ namespace RecGames
                 cmd.Parameters.Add("@recommendations", SqlDbType.Int).Value = -1;
             }
 
-            cmd.Parameters.Add("@platforms", SqlDbType.VarChar, 50).Value = game.platforms.platformsString();
-            cmd.Parameters.Add("@publishers", SqlDbType.VarChar, 50).Value = game.publishersString();
-            cmd.Parameters.Add("@developers", SqlDbType.VarChar, 50).Value = game.developersString();
+            cmd.Parameters.Add("@platforms", SqlDbType.VarChar, 50).Value = game.Platforms.platformsString();
+            cmd.Parameters.Add("@publishers", SqlDbType.VarChar, 50).Value = game.ShowPublishers();
+            cmd.Parameters.Add("@developers", SqlDbType.VarChar, 50).Value = game.ShowDevelopers();
 
             con.Open();
 
@@ -297,12 +294,12 @@ namespace RecGames
             string sql = "INSERT INTO price(id,currency,value) VALUES(@id,@currency,@value)";
             SqlCommand cmd = new SqlCommand(sql, con);
 
-            cmd.Parameters.Add("@id", SqlDbType.Int).Value = game.steam_appid;
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = game.SteamAppId;
 
             try
             {
-                cmd.Parameters.Add("@currency", SqlDbType.VarChar, 40).Value = game.price_overview.currency;
-                cmd.Parameters.Add("@value", SqlDbType.Int).Value = game.price_overview.final;
+                cmd.Parameters.Add("@currency", SqlDbType.VarChar, 40).Value = game.PriceOverview.Currency;
+                cmd.Parameters.Add("@value", SqlDbType.Int).Value = game.PriceOverview.Final;
             }
             catch (System.NullReferenceException)
             {
@@ -350,7 +347,7 @@ namespace RecGames
             for (int i = 1; i < tags.Count - 2; i++)
             {
                 cmd = new SqlCommand(sql2, con);
-                cmd.Parameters.Add("@id", SqlDbType.Int).Value = game.steam_appid;
+                cmd.Parameters.Add("@id", SqlDbType.Int).Value = game.SteamAppId;
                 cmd.Parameters.Add("@tag", SqlDbType.VarChar, 40).Value = tags[i];
                 cmd.ExecuteScalar();
             }
@@ -361,30 +358,30 @@ namespace RecGames
 
         public void SaveInfo()
         {
-            Console.WriteLine(game.name);
-            Console.WriteLine(game.steam_appid);
+            Console.WriteLine(game.Name);
+            Console.WriteLine(game.SteamAppId);
 
             try
             {
-                Console.WriteLine(game.price_overview.currency);
-                Console.WriteLine(game.price_overview.final);
+                Console.WriteLine(game.PriceOverview.Currency);
+                Console.WriteLine(game.PriceOverview.Final);
             }
             catch (System.NullReferenceException)
             {
                 Console.WriteLine("Free-to-play");
             }
 
-            Console.WriteLine(game.categories[0].id);
-            Console.WriteLine(game.categories[0].description);
+            Console.WriteLine(game.Categories[0].Id);
+            Console.WriteLine(game.Categories[0].Description);
             
-            using (StreamWriter arquivo = File.AppendText(@"games\" + game.steam_appid.ToString() + ".txt"))
+            using (StreamWriter arquivo = File.AppendText(@"games\" + game.SteamAppId.ToString() + ".txt"))
             {
-                arquivo.WriteLine("Name: " + game.name);
-                arquivo.WriteLine("Steam ID: " + game.steam_appid);
+                arquivo.WriteLine("Name: " + game.Name);
+                arquivo.WriteLine("Steam ID: " + game.SteamAppId);
 
                 try
                 {
-                    arquivo.WriteLine("Price: " + game.price_overview.final + "(" + game.price_overview.currency + ")");
+                    arquivo.WriteLine("Price: " + game.PriceOverview.Final + "(" + game.PriceOverview.Currency + ")");
                 }
                 catch (System.NullReferenceException)
                 {

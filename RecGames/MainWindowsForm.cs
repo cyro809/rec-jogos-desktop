@@ -20,7 +20,7 @@ namespace RecGames
 
             Program.loadPlayerInformations(id);
 
-            textBoxSteamName.Text = Program.player.steam_name;
+            textBoxSteamName.Text = Program.player.SteamName;
 
             var definingTags = Program.player.definingTags.Values;
             for(int i = 0; i < Program.player.definingTags.Count; i++) {

@@ -75,7 +75,7 @@ namespace RecGames
             {
                 for (int j = 0; j < recommendedGames.Count; j++)
                 {
-                    if (recommendedGames.ElementAt(j).steam_appid == topRecommendedGames.ElementAt(i))
+                    if (recommendedGames.ElementAt(j).SteamAppId == topRecommendedGames.ElementAt(i))
                     {
                         gamesToJustify.Add(recommendedGames.ElementAt(j));
                     }
@@ -87,8 +87,8 @@ namespace RecGames
             {
                 gameTags += gamesToJustify.ElementAt(0).tags.ElementAt(i) + " ";
             }
-            string urlGame = String.Format("http://store.steampowered.com/app/{0}/", gamesToJustify.ElementAt(0).steam_appid);
-            justification = String.Format("Estamos recomendando o jogo {0} pois vimos que ele tem: {1}. Se quiser saber mais sobre: {2}", gamesToJustify.ElementAt(0).name, gameTags, urlGame);
+            string urlGame = String.Format("http://store.steampowered.com/app/{0}/", gamesToJustify.ElementAt(0).SteamAppId);
+            justification = String.Format("Estamos recomendando o jogo {0} pois vimos que ele tem: {1}. Se quiser saber mais sobre: {2}", gamesToJustify.ElementAt(0).Name, gameTags, urlGame);
 
 
             Console.Write(justification);

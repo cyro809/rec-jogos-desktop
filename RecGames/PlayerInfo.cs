@@ -47,10 +47,10 @@ namespace RecGames
 
             JObject jObjectPlayers = (JObject)jArrayPlayers[0];
 
-            player.steam_id = (long)jObjectPlayers["steamid"];
-            player.steam_name = (string)jObjectPlayers["personaname"];
-            player.real_name = (string)jObjectPlayers["realname"];
-            player.profile_url = (string)jObjectPlayers["profileurl"];
+            player.SteamId = (long)jObjectPlayers["steamid"];
+            player.SteamName = (string)jObjectPlayers["personaname"];
+            player.RealName = (string)jObjectPlayers["realname"];
+            player.ProfileUrl = (string)jObjectPlayers["profileurl"];
 
             player.ToString();
         }
@@ -104,8 +104,8 @@ namespace RecGames
                     JObject jObjectRecentlyPlayedGames = (JObject)jArrayRecentlyPlayedGames[i];
                     RecentlyPlayedGames playedGames = new RecentlyPlayedGames();
 
-                    playedGames.steam_appid = (int)jObjectRecentlyPlayedGames["appid"];
-                    playedGames.name = (string)jObjectRecentlyPlayedGames["name"];
+                    playedGames.SteamAppId = (int)jObjectRecentlyPlayedGames["appid"];
+                    playedGames.Name = (string)jObjectRecentlyPlayedGames["name"];
                     playedGames.playtime = (int)jObjectRecentlyPlayedGames["playtime_forever"];
                     playedGames.playtime2weeks = (int)jObjectRecentlyPlayedGames["playtime_2weeks"];
 

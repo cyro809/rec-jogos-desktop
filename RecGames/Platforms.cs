@@ -1,33 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RecGames
 {
     class Platforms
     {
-        public bool windows { get; set; }
-        public bool mac { get; set; }
-        public bool linux { get; set; }
-        public String supported;
-        public String platformsString()
+        public string platformsSupported;
+
+        public bool Windows { get; set; }
+        public bool Mac { get; set; }
+        public bool Linux { get; set; }
+        
+        public string platformsString()
         {
-            supported = "";
-            if(windows)
+            platformsSupported = String.Empty;
+            if(Windows)
             {
-                supported += "windows ";
+                platformsSupported += "Windows ";
             }
-            if(mac)
+            if(Mac)
             {
-                supported += "mac ";
+                platformsSupported += "Mac ";
             }
-            if(linux)
+            if(Linux)
             {
-                supported += "linux";
+                platformsSupported += "Linux ";
             }
-            return supported;
+            return platformsSupported;
         }
     }
 }

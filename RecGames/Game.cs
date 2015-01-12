@@ -1,65 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HtmlAgilityPack;
 
 namespace RecGames
 {
     class Game
     {
-        public int steam_appid { get; set; }
-        public string name { get; set; }
-        public Price_overview price_overview { get; set; }
-        public string controller_support { get; set; }
-        public Platforms platforms { get; set; }
-        public List<string> developers { get; set; }
-        public List<string> publishers { get; set; }
-        public Categories[] categories { get; set; }
-        public Recommendations recommendations { get; set; }
-        public Metacritic metacritic { get; set; }
         public List<string> tags = new List<string>();
         public float recommendation_score = 0.0f;
-        public String developersString()
+
+        public int SteamAppId { get; set; }
+        public string Name { get; set; }
+        public PriceOverview PriceOverview { get; set; }
+        public string ControllerSupport { get; set; }
+        public Platforms Platforms { get; set; }
+        public List<string> Developers { get; set; }
+        public List<string> Publishers { get; set; }
+        public Categories[] Categories { get; set; }
+        public int TotalRecommendations { get; set; }
+        public int MetacriticScore { get; set; }
+
+        public string ShowDevelopers()
         {
             try
             {
-                string dev = developers[0];
-                if (developers.Count > 1)
+                string developer = Developers[0];
+                if (Developers.Count > 1)
                 {
-                    for (int i = 1; i < developers.Count; i++)
+                    for (int index = 1; index < Developers.Count; index++)
                     {
-                        dev += "," + developers[i];
+                        developer += "," + Developers[index];
                     }
                 }
-                return dev;
+                return developer;
             }
             catch(System.NullReferenceException)
             {
-                return "";
-            }
-            
-            
+                return String.Empty;
+            }            
         }
-        public String publishersString()
+
+        public string ShowPublishers()
         {
             try
             {
-                string pub = publishers[0];
-                if (publishers.Count > 1)
+                string publisher = Publishers[0];
+                if (Publishers.Count > 1)
                 {
-                    for (int i = 1; i < publishers.Count; i++)
+                    for (int index = 1; index < Publishers.Count; index++)
                     {
-                        pub += "," + publishers[i];
+                        publisher += "," + Publishers[index];
                     }
                 }
 
-                return pub;
+                return publisher;
             }
             catch (System.NullReferenceException)
             {
-                return "";
+                return String.Empty;
             }
         }
     }
