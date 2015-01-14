@@ -83,9 +83,9 @@ namespace RecGames
             }
 
             string gameTags = "";
-            for (int i = 0; i < gamesToJustify.ElementAt(0).tags.Count; i++)
+            for (int i = 0; i < gamesToJustify.ElementAt(0).Tags.Count; i++)
             {
-                gameTags += gamesToJustify.ElementAt(0).tags.ElementAt(i) + " ";
+                gameTags += gamesToJustify.ElementAt(0).Tags.ElementAt(i) + " ";
             }
             string urlGame = String.Format("http://store.steampowered.com/app/{0}/", gamesToJustify.ElementAt(0).SteamAppId);
             justification = String.Format("Estamos recomendando o jogo {0} pois vimos que ele tem: {1}. Se quiser saber mais sobre: {2}", gamesToJustify.ElementAt(0).Name, gameTags, urlGame);

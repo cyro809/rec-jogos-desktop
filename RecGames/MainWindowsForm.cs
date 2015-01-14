@@ -22,14 +22,14 @@ namespace RecGames
 
             textBoxSteamName.Text = Program.player.SteamName;
 
-            var definingTags = Program.player.definingTags.Values;
-            for(int i = 0; i < Program.player.definingTags.Count; i++) {
+            var definingTags = Program.player.DefiningTags.Values;
+            for(int i = 0; i < Program.player.DefiningTags.Count; i++) {
                 textBoxPlayerCharacteristics.Text += definingTags.ElementAt(i) + Environment.NewLine;
             }
 
-            for (int i = 0; i < Program.player.myGames.Count; i++)
+            for (int i = 0; i < Program.player.MyGames.Count; i++)
             {
-                textBoxMyGames.Text += Program.player.myGames.ElementAt(i) + Environment.NewLine;
+                textBoxMyGames.Text += Program.player.MyGames.ElementAt(i) + Environment.NewLine;
             }
         }
 

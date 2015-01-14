@@ -5,8 +5,10 @@ namespace RecGames
 {
     class Game
     {
-        public List<string> tags = new List<string>();
-        public float recommendation_score = 0.0f;
+        public Game()
+        {
+            Tags = new List<string>();
+        }
 
         public int SteamAppId { get; set; }
         public string Name { get; set; }
@@ -15,11 +17,12 @@ namespace RecGames
         public Platforms Platforms { get; set; }
         public List<string> Developers { get; set; }
         public List<string> Publishers { get; set; }
+        public List<string> Tags { get; set; }
         public Categories[] Categories { get; set; }
         public int TotalRecommendations { get; set; }
         public int MetacriticScore { get; set; }
 
-        public string ShowDevelopers()
+        public string FormatDevelopers()
         {
             try
             {
@@ -39,7 +42,7 @@ namespace RecGames
             }            
         }
 
-        public string ShowPublishers()
+        public string FormatPublishers()
         {
             try
             {

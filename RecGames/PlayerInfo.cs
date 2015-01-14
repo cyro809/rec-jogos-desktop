@@ -74,13 +74,13 @@ namespace RecGames
                 int playtime = (int)jObjectOwnedGames["playtime_forever"];
                 string name = (string)jObjectOwnedGames["name"];
 
-                player.ownedGames.Add(appId, playtime);
-                player.myGames.Add(name);
+                player.OwnedGames.Add(appId, playtime);
+                player.MyGames.Add(name);
             }
 
-            player.ownedGames = player.ownedGames.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            player.OwnedGames = player.OwnedGames.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
-            int count = player.ownedGames.Count;
+            int count = player.OwnedGames.Count;
 
             player.ToString();
         }
@@ -106,13 +106,13 @@ namespace RecGames
 
                     playedGames.SteamAppId = (int)jObjectRecentlyPlayedGames["appid"];
                     playedGames.Name = (string)jObjectRecentlyPlayedGames["name"];
-                    playedGames.playtime = (int)jObjectRecentlyPlayedGames["playtime_forever"];
-                    playedGames.playtime2weeks = (int)jObjectRecentlyPlayedGames["playtime_2weeks"];
+                    playedGames.Playtime = (int)jObjectRecentlyPlayedGames["playtime_forever"];
+                    playedGames.PlaytimeTwoWeeks = (int)jObjectRecentlyPlayedGames["playtime_2weeks"];
 
-                    player.recentlyPlayedGames.Add(playedGames);
+                    player.RecentlyPlayedGames.Add(playedGames);
                 }
 
-                player.recentlyPlayedGames = player.recentlyPlayedGames.OrderByDescending(x => x.playtime2weeks).ToList();
+                player.RecentlyPlayedGames = player.RecentlyPlayedGames.OrderByDescending(x => x.PlaytimeTwoWeeks).ToList();
             }
 
             player.ToString();
@@ -141,7 +141,7 @@ namespace RecGames
                 {
                     while (reader.Read())
                     {
-                        player.definingTags.Add(reader.GetInt32(0), reader.GetString(1));
+                        player.DefiningTags.Add(reader.GetInt32(0), reader.GetString(1));
 
                         Console.WriteLine(reader.GetString(1));
                     }

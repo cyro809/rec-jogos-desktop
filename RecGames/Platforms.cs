@@ -4,28 +4,27 @@ namespace RecGames
 {
     class Platforms
     {
-        public string platformsSupported;
-
+        public string PlatformsSupported { get; set; }
         public bool Windows { get; set; }
         public bool Mac { get; set; }
         public bool Linux { get; set; }
         
-        public string platformsString()
+        public string SupportedPlatforms()
         {
-            platformsSupported = String.Empty;
+            PlatformsSupported = String.Empty;
             if(Windows)
             {
-                platformsSupported += "Windows ";
+                PlatformsSupported += "Windows ";
             }
             if(Mac)
             {
-                platformsSupported += "Mac ";
+                PlatformsSupported += "Mac ";
             }
             if(Linux)
             {
-                platformsSupported += "Linux ";
+                PlatformsSupported += "Linux ";
             }
-            return platformsSupported;
+            return PlatformsSupported;
         }
     }
 }

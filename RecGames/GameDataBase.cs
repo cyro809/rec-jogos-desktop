@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -10,7 +8,6 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Data.SqlClient;
 using System.Data;
-using System.Data.Sql;
 namespace RecGames
 {
     class GameDataBase
@@ -73,25 +70,26 @@ namespace RecGames
             }
 
             game = JsonConvert.DeserializeObject<Game>(appDetails);
-            game.tags = tags;
+            game.Tags = tags;
 
-            saveGameDB();
+            SaveGameDB();
         }
 
         public List<int> GetTagsMostPlayedGames(Player player)
         {
             List<int> tags = new List<int>();
 
-            for (int i = 0; i < player.ownedGames.Count; i++)
+            for (int i = 0; i < player.OwnedGames.Count; i++)
             {
-                if (player.ownedGames.ElementAt(i).Value > 0)
+                if (player.OwnedGames.ElementAt(i).Value > 0)
                 {
                     //fazer a querie das tags
                     string sql = "SELECT t.Id FROM Game_Tags AS gt, Tags as t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
                     SqlCommand cmd = new SqlCommand(sql, con);
                     
-                    cmd.Parameters.Add("@gameId", SqlDbType.Int).Value = player.ownedGames.ElementAt(i).Key;
+                    cmd.Parameters.Add("@gameId", SqlDbType.Int).Value = player.OwnedGames.ElementAt(i).Key;
 
+                    //as vezes acontece System.Data.SqlClient.SqlException' por Tempo Limite de Conexão Expirado
                     con.Open();
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -116,11 +114,11 @@ namespace RecGames
         {
             List<Game> recommendedGames = new List<Game>();
 
-            for(int i = 0; i < player.definingTags.Count; i++) {
+            for(int i = 0; i < player.DefiningTags.Count; i++) {
                 string sql = "SELECT DISTINCT g.* FROM Game AS g, Game_Tags AS gt WHERE g.Id = gt.Id_game AND gt.Id_tags = @tagId";
                 SqlCommand cmd = new SqlCommand(sql, con);
                 
-                cmd.Parameters.Add("@tagId", SqlDbType.Int).Value = player.definingTags.Keys.ElementAt(i);
+                cmd.Parameters.Add("@tagId", SqlDbType.Int).Value = player.DefiningTags.Keys.ElementAt(i);
 
                 con.Open();
                 
@@ -132,12 +130,12 @@ namespace RecGames
                     {
                         Game game = new Game();
                         game.SteamAppId = reader.GetInt32(0);
-                        if (!player.ownedGames.Keys.Contains(game.SteamAppId))
+                        if (!player.OwnedGames.Keys.Contains(game.SteamAppId))
                         {
                             game.Name = reader.GetString(1);
 
                             Platforms platforms = new Platforms();
-                            platforms.platformsSupported = reader.GetString(3);
+                            platforms.PlatformsSupported = reader.GetString(3);
                             game.Platforms = platforms;
                             
                             List<string> developers = new List<string>();
@@ -180,7 +178,7 @@ namespace RecGames
             {
                 while (reader.Read())
                 {
-                    game.tags.Add(reader.GetString(0));
+                    game.Tags.Add(reader.GetString(0));
                 }
             }
 
@@ -240,7 +238,7 @@ namespace RecGames
             return topRecommendedGames;
         }
 
-        public void saveGameDB()
+        public void SaveGameDB()
         {
             string sql = "INSERT INTO game (id, name, metacritic, recommendations, platforms, publishers, developers) VALUES (@id, @name,@metacritic, @recommendations, @platforms, @publishers, @developers)";
             SqlCommand cmd = new SqlCommand(sql, con);
@@ -268,9 +266,9 @@ namespace RecGames
                 cmd.Parameters.Add("@recommendations", SqlDbType.Int).Value = -1;
             }
 
-            cmd.Parameters.Add("@platforms", SqlDbType.VarChar, 50).Value = game.Platforms.platformsString();
-            cmd.Parameters.Add("@publishers", SqlDbType.VarChar, 50).Value = game.ShowPublishers();
-            cmd.Parameters.Add("@developers", SqlDbType.VarChar, 50).Value = game.ShowDevelopers();
+            cmd.Parameters.Add("@platforms", SqlDbType.VarChar, 50).Value = game.Platforms.SupportedPlatforms();
+            cmd.Parameters.Add("@publishers", SqlDbType.VarChar, 50).Value = game.FormatPublishers();
+            cmd.Parameters.Add("@developers", SqlDbType.VarChar, 50).Value = game.FormatDevelopers();
 
             con.Open();
 
