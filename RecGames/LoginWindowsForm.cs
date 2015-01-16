@@ -35,7 +35,7 @@ namespace RecGames
 
             try
             {
-                Program.validateSteamID(id);
+                Program.ValidateSteamID(id);
                 DialogResult = DialogResult.OK;
             }
             catch (LoginException loginException)

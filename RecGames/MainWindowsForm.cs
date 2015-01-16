@@ -18,7 +18,7 @@ namespace RecGames
             InitializeComponent();
             this.id = id;
 
-            Program.loadPlayerInformations(id);
+            Program.LoadPlayerInformations(id);
 
             textBoxSteamName.Text = Program.player.SteamName;
 
@@ -35,7 +35,7 @@ namespace RecGames
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.beginRecommendation(id);
+            Program.BeginRecommendation(id);
             textBoxRecommendedGames.Text = Program.justification;
             button1.Dispose();
         }

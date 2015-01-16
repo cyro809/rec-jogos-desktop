@@ -2,8 +2,6 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace RecGames
@@ -17,9 +15,9 @@ namespace RecGames
         static void Main(string[] args)
         {
             Application.EnableVisualStyles();
-            LoginWindowsForm fLogin = new LoginWindowsForm();
+            LoginWindowsForm loginWindowsForm = new LoginWindowsForm();
 
-            if (fLogin.ShowDialog() == DialogResult.OK)
+            if (loginWindowsForm.ShowDialog() == DialogResult.OK)
             {
                 Application.Run(new MainWindowsForm(playerID));
             }
@@ -29,7 +27,7 @@ namespace RecGames
             }
         }
 
-        public static bool validateSteamID(string id) 
+        public static bool ValidateSteamID(string id) 
         {
             PlayerInfo playerInfo = new PlayerInfo(id);
 
@@ -45,8 +43,8 @@ namespace RecGames
             return true;
         }
 
-        public static void loadPlayerInformations(string id) {
-            GameDataBase g = new GameDataBase();
+        public static void LoadPlayerInformations(string id) {
+            GameDataBase gameDataBase = new GameDataBase();
             PlayerInfo playerInfo = new PlayerInfo(id);
             List<int> tags = new List<int>();
 
@@ -54,20 +52,20 @@ namespace RecGames
             playerInfo.GetPlayerOwnedGames(player);
             playerInfo.GetPlayerRecentlyPlayedGames(player);
 
-            tags = g.GetTagsMostPlayedGames(player);
+            tags = gameDataBase.GetTagsFromMostPlayedGames(player);
             playerInfo.GetPlayerDefiningTags(tags, player);
         }
 
-        public static void beginRecommendation(string id)
+        public static void BeginRecommendation(string id)
         {
-            GameDataBase g = new GameDataBase();
+            GameDataBase gameDataBase = new GameDataBase();
             PlayerInfo playerInfo = new PlayerInfo(id);
             List<int> tags = new List<int>();
             List<Game> recommendedGames = new List<Game>();
             List<int> topRecommendedGames = new List<int>();
 
-            recommendedGames = g.getRecommendedGames(player);
-            topRecommendedGames = g.RecommendationsScore(recommendedGames, tags, id);
+            recommendedGames = gameDataBase.GetRecommendedGames(player);
+            topRecommendedGames = gameDataBase.RecommendationsScore(recommendedGames, tags, id);
 
             List<Game> gamesToJustify = new List<Game>();
 
@@ -82,7 +80,7 @@ namespace RecGames
                 }
             }
 
-            string gameTags = "";
+            string gameTags = String.Empty;
             for (int i = 0; i < gamesToJustify.ElementAt(0).Tags.Count; i++)
             {
                 gameTags += gamesToJustify.ElementAt(0).Tags.ElementAt(i) + " ";
