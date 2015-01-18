@@ -17,7 +17,13 @@ namespace RecGames
         public string title;
         HtmlDocument htmlDocument = new HtmlDocument();
         List<string> tags = new List<string>();
-        SqlConnection sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|GamesInfo.mdf;Integrated Security=True");
+
+        const string LocalDataBasePath = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|GamesInfo.mdf;Integrated Security=True; Connection Timeout=30";
+        const string DefineGameTagsQuerie = "SELECT DISTINCT t.Tag FROM Game_Tags AS gt, Tags As t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
+        const string GetRecommendedGamesQuerie = "SELECT DISTINCT g.* FROM Game AS g, Game_Tags AS gt WHERE g.Id = gt.Id_game AND gt.Id_tags = @tagId";
+        const string GetTagsFromMostPlayedGamesQuerie = "SELECT t.Id FROM Game_Tags AS gt, Tags as t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
+
+        SqlConnection sqlConnection = new SqlConnection(LocalDataBasePath);
 
         public string AppDetails { get; set; }
 
@@ -85,9 +91,7 @@ namespace RecGames
             {
                 if (player.OwnedGames.ElementAt(i).Value > 0)
                 {
-                    //fazer a querie das tags
-                    string sqlQuery = "SELECT t.Id FROM Game_Tags AS gt, Tags as t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
-                    SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+                    SqlCommand sqlCommand = new SqlCommand(GetTagsFromMostPlayedGamesQuerie, sqlConnection);
 
                     sqlCommand.Parameters.Add("@gameId", SqlDbType.Int).Value = player.OwnedGames.ElementAt(i).Key;
 
@@ -118,8 +122,7 @@ namespace RecGames
 
             for (int i = 0; i < player.DefiningTags.Count; i++)
             {
-                string sqlQuery = "SELECT DISTINCT g.* FROM Game AS g, Game_Tags AS gt WHERE g.Id = gt.Id_game AND gt.Id_tags = @tagId";
-                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand(GetRecommendedGamesQuerie, sqlConnection);
 
                 sqlCommand.Parameters.Add("@tagId", SqlDbType.Int).Value = player.DefiningTags.Keys.ElementAt(i);
 
@@ -131,31 +134,7 @@ namespace RecGames
                 {
                     while (sqlDataReader.Read())
                     {
-                        Game game = new Game();
-                        game.SteamAppId = sqlDataReader.GetInt32(0);
-                        if (!player.OwnedGames.Keys.Contains(game.SteamAppId))
-                        {
-                            game.Name = sqlDataReader.GetString(1);
-
-                            Platforms platforms = new Platforms();
-                            platforms.PlatformsSupported = sqlDataReader.GetString(3);
-                            game.Platforms = platforms;
-
-                            List<string> developers = new List<string>();
-                            developers.Add(sqlDataReader.GetString(4));
-                            game.Developers = developers;
-
-                            List<string> publishers = new List<string>();
-                            publishers.Add(sqlDataReader.GetString(5));
-                            game.Publishers = publishers;
-
-                            game.TotalRecommendations = sqlDataReader.GetInt32(6); ;
-
-                            game.MetacriticScore = sqlDataReader.GetInt32(7); ;
-
-                            DefineGameTags(game);
-                            recommendedGames.Add(game);
-                        }
+                        AddRecommendedGames(player, sqlDataReader, recommendedGames);
                     }
                 }
                 sqlDataReader.Close();
@@ -165,11 +144,40 @@ namespace RecGames
             return recommendedGames;
         }
 
+        private void AddRecommendedGames(Player player, SqlDataReader sqlDataReader, List<Game> recommendedGames)
+        {
+            Game game = new Game();
+            game.SteamAppId = sqlDataReader.GetInt32(0);
+            if (!player.OwnedGames.Keys.Contains(game.SteamAppId))
+            {
+                game.Name = sqlDataReader.GetString(1);
+
+                Platforms platforms = new Platforms();
+                platforms.PlatformsSupported = sqlDataReader.GetString(3);
+                game.Platforms = platforms;
+
+                List<string> developers = new List<string>();
+                developers.Add(sqlDataReader.GetString(4));
+                game.Developers = developers;
+
+                List<string> publishers = new List<string>();
+                publishers.Add(sqlDataReader.GetString(5));
+                game.Publishers = publishers;
+
+                game.TotalRecommendations = sqlDataReader.GetInt32(6); ;
+
+                game.MetacriticScore = sqlDataReader.GetInt32(7); ;
+
+                DefineGameTags(game);
+                recommendedGames.Add(game);
+            }
+        }
+
         public void DefineGameTags(Game game)
         {
-            SqlConnection sqlConnection2 = new SqlConnection(@"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|GamesInfo.mdf;Integrated Security=True");
-            string sqlQuery = "SELECT DISTINCT t.Tag FROM Game_Tags AS gt, Tags As t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
-            SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection2);
+            SqlConnection sqlConnection2 = new SqlConnection(LocalDataBasePath);
+            
+            SqlCommand sqlCommand = new SqlCommand(DefineGameTagsQuerie, sqlConnection2);
 
             sqlCommand.Parameters.Add("@gameId", SqlDbType.Int).Value = game.SteamAppId;
 
