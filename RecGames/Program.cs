@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using RecGames.Strings.en_US;
+using System.Resources;
 
 namespace RecGames
 {
@@ -86,10 +88,9 @@ namespace RecGames
                 gameTags += gamesToJustify.ElementAt(0).Tags.ElementAt(i) + " ";
             }
             string urlGame = String.Format("http://store.steampowered.com/app/{0}/", gamesToJustify.ElementAt(0).SteamAppId);
-            justification = String.Format("Estamos recomendando o jogo {0} pois vimos que ele tem: {1}. Se quiser saber mais sobre: {2}", gamesToJustify.ElementAt(0).Name, gameTags, urlGame);
+            justification = String.Format(Resources.Jus, gamesToJustify.ElementAt(0).Name, gameTags, urlGame);
 
-
-            Console.Write(justification);
+                Console.Write(justification);
 
             using (StreamWriter arquivo = File.AppendText(@"recommendation\recomendString.txt"))
             {
