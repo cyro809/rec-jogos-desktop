@@ -88,7 +88,7 @@ namespace RecGames
                 gameTags += gamesToJustify.ElementAt(0).Tags.ElementAt(i) + " ";
             }
             string urlGame = String.Format("http://store.steampowered.com/app/{0}/", gamesToJustify.ElementAt(0).SteamAppId);
-            justification = String.Format(Resources.Jus, gamesToJustify.ElementAt(0).Name, gameTags, urlGame);
+            justification = String.Format(Resources.Justification, gamesToJustify.ElementAt(0).Name, gameTags, urlGame);
 
                 Console.Write(justification);
 

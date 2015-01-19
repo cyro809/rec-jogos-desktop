@@ -63,9 +63,9 @@ namespace RecGames.Strings.en_US {
         /// <summary>
         ///   Looks up a localized string similar to We are recommeding &quot;{0}&quot; because it has: &quot;{1}&quot;. If you want to know more about it: &quot;{2}&quot;.
         /// </summary>
-        internal static string Jus {
+        internal static string Justification {
             get {
-                return ResourceManager.GetString("Jus", resourceCulture);
+                return ResourceManager.GetString("Justification", resourceCulture);
             }
         }
     }
