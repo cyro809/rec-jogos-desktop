@@ -19,9 +19,9 @@ namespace RecGames
         List<string> tags = new List<string>();
 
         const string LocalDataBasePath = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|GamesInfo.mdf;Integrated Security=True; Connection Timeout=30";
-        const string DefineGameTagsQuerie = "SELECT DISTINCT t.Tag FROM Game_Tags AS gt, Tags As t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
-        const string GetRecommendedGamesQuerie = "SELECT DISTINCT g.* FROM Game AS g, Game_Tags AS gt WHERE g.Id = gt.Id_game AND gt.Id_tags = @tagId";
-        const string GetTagsFromMostPlayedGamesQuerie = "SELECT t.Id FROM Game_Tags AS gt, Tags as t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
+        const string DefineGameTagsQuery = "SELECT DISTINCT t.Tag FROM Game_Tags AS gt, Tags As t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
+        const string GetRecommendedGamesQuery = "SELECT DISTINCT g.* FROM Game AS g, Game_Tags AS gt WHERE g.Id = gt.Id_game AND gt.Id_tags = @tagId";
+        const string GetTagsFromMostPlayedGamesQuery = "SELECT t.Id FROM Game_Tags AS gt, Tags as t WHERE gt.Id_game = @gameId AND gt.Id_tags = t.Id";
 
         SqlConnection sqlConnection = new SqlConnection(LocalDataBasePath);
 
@@ -91,7 +91,7 @@ namespace RecGames
             {
                 if (player.OwnedGames.ElementAt(i).Value > 0)
                 {
-                    SqlCommand sqlCommand = new SqlCommand(GetTagsFromMostPlayedGamesQuerie, sqlConnection);
+                    SqlCommand sqlCommand = new SqlCommand(GetTagsFromMostPlayedGamesQuery, sqlConnection);
 
                     sqlCommand.Parameters.Add("@gameId", SqlDbType.Int).Value = player.OwnedGames.ElementAt(i).Key;
 
@@ -122,7 +122,7 @@ namespace RecGames
 
             for (int i = 0; i < player.DefiningTags.Count; i++)
             {
-                SqlCommand sqlCommand = new SqlCommand(GetRecommendedGamesQuerie, sqlConnection);
+                SqlCommand sqlCommand = new SqlCommand(GetRecommendedGamesQuery, sqlConnection);
 
                 sqlCommand.Parameters.Add("@tagId", SqlDbType.Int).Value = player.DefiningTags.Keys.ElementAt(i);
 
@@ -177,7 +177,7 @@ namespace RecGames
         {
             SqlConnection sqlConnection2 = new SqlConnection(LocalDataBasePath);
             
-            SqlCommand sqlCommand = new SqlCommand(DefineGameTagsQuerie, sqlConnection2);
+            SqlCommand sqlCommand = new SqlCommand(DefineGameTagsQuery, sqlConnection2);
 
             sqlCommand.Parameters.Add("@gameId", SqlDbType.Int).Value = game.SteamAppId;
 
