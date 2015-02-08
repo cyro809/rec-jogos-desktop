@@ -46,7 +46,7 @@ namespace RecGames
         }
 
         public static void LoadPlayerInformations(string id) {
-            GameDataBase gameDataBase = new GameDataBase();
+            Recommendation recommendation = new Recommendation();
             PlayerInfo playerInfo = new PlayerInfo(id);
             List<int> tags = new List<int>();
 
@@ -54,20 +54,20 @@ namespace RecGames
             playerInfo.GetPlayerOwnedGames(player);
             playerInfo.GetPlayerRecentlyPlayedGames(player);
 
-            tags = gameDataBase.GetTagsFromMostPlayedGames(player);
+            tags = recommendation.GetTagsFromMostPlayedGames(player);
             playerInfo.GetPlayerDefiningTags(tags, player);
         }
 
         public static void BeginRecommendation(string id)
         {
-            GameDataBase gameDataBase = new GameDataBase();
+            Recommendation recommendation = new Recommendation();
             PlayerInfo playerInfo = new PlayerInfo(id);
             List<int> tags = new List<int>();
             List<Game> recommendedGames = new List<Game>();
             List<int> topRecommendedGames = new List<int>();
 
-            recommendedGames = gameDataBase.GetRecommendedGames(player);
-            topRecommendedGames = gameDataBase.RecommendationsScore(recommendedGames, tags, id);
+            recommendedGames = recommendation.GetRecommendedGames(player);
+            topRecommendedGames = recommendation.RecommendationsScore(recommendedGames, tags, id);
 
             List<Game> gamesToJustify = new List<Game>();
 
